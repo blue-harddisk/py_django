@@ -120,3 +120,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 告知Django静态文件保存在哪个目录下
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_files')]
