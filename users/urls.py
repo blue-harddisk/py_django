@@ -7,5 +7,16 @@ urlpatterns = [
     # 参数1： 匹配url的正则表达式（需要用 ^ 和 $ 匹配开头和结尾）
     # 参数2： url匹配成功执行的视图函数
     url(r'^index/$', views.index),
-    url(r'^news/(?P<category>\d+)/(?P<page>\d+)$', views.news)
+    # path方法获取请求参数
+    url(r'^news/(?P<category>\d+)/(?P<page>\d+)$', views.news),
+    # 查询字符串,跟get.post方法没关系
+    url(r'^news2', views.news2),
+    # post,表单,键值对
+    url(r'^news3', views.news3),
+    # post,json
+    url(r'^news4', views.news4),
+    # 请求头
+    url(r'^news5', views.news5)
+
+
 ]
