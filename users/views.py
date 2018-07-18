@@ -27,16 +27,16 @@ def news3(request):
     category = request.POST.get('category')
     page = request.POST.get('page')
     a = request.POST.getlist('a')
-
     return HttpResponse("显示新闻:%s,%s<br>a:%s" %(category, page, a))
+
 
 def news4(request):
     """接收参数(post,json)实验"""
     # 获取json字符串
-    json_str = request.body
-    json_str = json_str.decode()  # bytes -> str
+    json_byt= request.body
+    json_str = json_byt.decode()  # bytes -> str
 
-    # 解析json
+    # 解析json,转字典
     dict_data = json.loads(json_str)
     category = dict_data.get('category')
     page = dict_data.get('page')
