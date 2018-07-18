@@ -2,9 +2,12 @@ import json
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.views import View
+
+from users.decorators import check_ip
 
 
-# Create your views here.
 def index(request):
     """访问首页的视图"""
     return render(request, "users/ThinkPad.html")
@@ -100,3 +103,38 @@ def get_session(request):
     user_name = request.session.get('user_name')
     text = 'user_id = %s, user_name = %s' % (user_id, user_name)
     return HttpResponse(text)
+
+
+#方式三
+class CheckIpMixin(object):
+    """
+    Mixin: 封装(扩展)了一个功能: 检测ip黑名单
+    """
+    @method_decorator(check_ip)
+    def dispatch(self, request, *args, **kwargs):
+        # 调用View的dispatch
+        return super().dispatch(request, *args, **kwargs)
+
+
+# 方式二
+# @method_decorator(check_ip, name='get')  # 为特定的请求方法添加
+# @method_decorator(check_ip, name='dispatch')    # 为所有的请求方法添加
+class PostView(CheckIpMixin, View):
+
+    # 给所有的http方法都添加装饰器
+    # @method_decorator(check_ip)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    # # 方式一
+    # @method_decorator(check_ip)
+    def get(self, request):
+        """get请求： 显示发帖界面"""
+        return render(request, 'users/post_view.html')
+
+    def post(self, request):
+        """post请求： 执行发帖操作"""
+        # 代码简略
+        return HttpResponse('执行发帖操作')
+
+
