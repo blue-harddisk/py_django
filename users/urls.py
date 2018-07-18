@@ -16,7 +16,19 @@ urlpatterns = [
     # post,json
     url(r'^news4', views.news4),
     # 请求头
-    url(r'^news5', views.news5)
+    url(r'^news5', views.news5),
 
+    # response
+    url(r'come1', views.come1),
+    # 重定向
+    url(r'come2', views.come2),
+
+    # cookie
+    url(r'^set_cookie$', views.set_cookie),
+    url(r'^get_cookie$', views.get_cookie),
+
+    # session
+    url(r'^set_session$', views.set_session),
+    url(r'^get_session$', views.get_session),
 
 ]
