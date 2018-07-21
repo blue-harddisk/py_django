@@ -1,6 +1,19 @@
 from django.db import models
 
 
+class BookInfoManager(models.Manager):
+    def all(self):
+        return super().filter(is_delete = False)
+    def create(self, title, bpub_date):
+        book = BookInfo(
+            btitle= title,
+            bpub_date=bpub_date,
+            bread=0,
+            bcomment=0
+        )
+        book.save()
+        return book
+
 #定义图书模型类BookInfo
 class BookInfo(models.Model):
     btitle = models.CharField(max_length=20, verbose_name='名称')
@@ -8,6 +21,9 @@ class BookInfo(models.Model):
     bread = models.IntegerField(default=0, verbose_name='阅读量')
     bcomment = models.IntegerField(default=0, verbose_name='评论量')
     is_delete = models.BooleanField(default=False, verbose_name='逻辑删除')
+    # 自定义管理器
+    objs = BookInfoManager()
+    objects = models.Manager()
 
     class Meta:
         db_table = 'tb_books'  # 指明数据库表名
