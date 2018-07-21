@@ -46,8 +46,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'users.middlewares.MyMiddleware1',  # 注册中间件
-    'users.middlewares.MyMiddleware2'
+    # 'users.middlewares.MyMiddleware1',  # 注册中间件
+    # 'users.middlewares.MyMiddleware2'
 ]
 
 ROOT_URLCONF = 'py_django.urls'
@@ -127,6 +127,7 @@ STATIC_URL = '/static/'
 
 # 告知Django静态文件保存在哪个目录下
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_files')]
+MEDIA_ROOT=os.path.join(BASE_DIR,"static_files/media")
 
 # django项目的缓存配置
 CACHES = {

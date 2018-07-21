@@ -34,6 +34,13 @@ class BookInfo(models.Model):
         """定义每个数据对象的显示信息"""
         return self.btitle
 
+    def pub_date(self):
+        return self.bpub_date.strftime("%Y-%m-%d")
+
+    # 后台方法列
+    pub_date.short_description = '发布日期'
+    pub_date.admin_order_field = 'bpub_date'
+
 
 #定义英雄模型类HeroInfo
 class HeroInfo(models.Model):
@@ -46,6 +53,7 @@ class HeroInfo(models.Model):
     hcomment = models.CharField(max_length=200, null=True, verbose_name='描述信息')
     hbook = models.ForeignKey(BookInfo, on_delete=models.CASCADE, verbose_name='图书')  # 外键
     is_delete = models.BooleanField(default=False, verbose_name='逻辑删除')
+    image = models.ImageField(upload_to='hero', verbose_name='头像', null=True)
 
     class Meta:
         db_table = 'tb_heros'
@@ -54,3 +62,9 @@ class HeroInfo(models.Model):
 
     def __str__(self):
         return self.hname
+
+    def read(self):
+        return self.hbook.bread
+
+    read.short_description = '图书阅读量'
+    read.admin_order_field = 'hbook__bread'
