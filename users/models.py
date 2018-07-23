@@ -20,6 +20,7 @@ class BookInfo(models.Model):
     bpub_date = models.DateField(verbose_name='发布日期')
     bread = models.IntegerField(default=0, verbose_name='阅读量')
     bcomment = models.IntegerField(default=0, verbose_name='评论量')
+    bimage = models.ImageField(upload_to='book', verbose_name='封面', null=True)
     is_delete = models.BooleanField(default=False, verbose_name='逻辑删除')
     # 自定义管理器
     objs = BookInfoManager()

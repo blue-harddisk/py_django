@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
@@ -6,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 
 from users.decorators import check_ip
+from users.models import BookInfo
 
 
 def index(request):
@@ -152,3 +154,115 @@ class PostView(View):
         return HttpResponse('执行发帖操作')
 
 
+class BooksAPIView(View):
+
+    def get(self, request):
+        """
+            查询所有图书.增加图书
+            路由：GET /books/
+        """
+        qs = BookInfo.objects.all()
+        book_list = []
+        for book in qs:
+            book_list.append({
+                'id':book.id,
+                'btitle':book.btitle,
+                'bpub_date':book.bpub_date,
+                'bread':book.bread,
+                'bcomment':book.bcomment,
+
+            })
+
+        return JsonResponse(book_list,safe=False)
+
+    def post(self, request):
+        """
+        新增图书
+        路由:POST /books/
+        """
+        json_byt = request.body
+        json_str = json_byt.decode()
+        book_dic = json.loads(json_str)
+
+        # 此处详细的校验参数
+        book = BookInfo.objects.create(
+            btitle= book_dic.get('btitle'),
+            bpub_date = datetime.strptime(book_dic.get('bpub_date'), '%Y-%m-%d').date(),
+            bread = book_dic.get("bread"),
+            bcomment = book_dic.get("bcomment")
+
+        )
+
+        return JsonResponse({
+            'id': book.id,
+            'btitle': book.btitle,
+            'bpub_date': book.bpub_date,
+            'bread': book.bread,
+            'bcomment': book.bcomment,
+        }, status=201)
+
+
+class BookAPIView(View):
+
+    def get(self, request, pk):
+        """
+        获取单本图书
+        pk: 查询字符串,参数,书本id
+        路由： GET  /books/<pk>/
+        """
+        try:
+            book = BookInfo.objects.get(pk = pk)
+        except BookInfo.DoesNotExist:
+            return HttpResponse(status=404)
+
+        return JsonResponse({
+            'id': book.id,
+            'btitle': book.btitle,
+            'bpub_date': book.bpub_date,
+            'bread': book.bread,
+            'bcomment': book.bcomment,
+        })
+
+    def put(self, request, pk):
+        """
+        修改一本书
+        路由： PUT  /books/<pk>
+        """
+
+        json_byt = request.body
+        json_str = json_byt.decode()
+        book_dic = json.loads(json_str)
+
+        try:
+            book = BookInfo.objects.get(pk = pk)
+        except BookInfo.DoesNotExist:
+            return HttpResponse(status=404)
+
+        # 此处详细的校验参数省略
+
+        book.btitle = book_dic.get('btitle', book.btitle)
+        book.bpub_date = datetime.strptime(book_dic.get('bpub_date', book.bpub_date), '%Y-%m-%d').date()
+        book.bread = book_dic.get("bread", book.bread)
+        book.bcomment = book_dic.get("bcomment", book.bcomment)
+        book.save()
+
+        return JsonResponse({
+            'id': book.id,
+            'btitle': book.btitle,
+            'bpub_date': book.bpub_date,
+            'bread': book.bread,
+            'bcomment': book.bcomment,
+        })
+
+    def delete(self, request, pk):
+        """
+        删除一本书
+        路由： DELETE /books/<pk>/
+        """
+        try:
+            book = BookInfo.objects.get(pk = pk)
+        except BookInfo.DoesNotExist:
+            return HttpResponse(status=404)
+
+        book.delete()
+        return HttpResponse(status=204)

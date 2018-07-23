@@ -13,9 +13,9 @@ class BookInfoAdmin(admin.ModelAdmin):
     list_display = ['id', 'btitle', 'pub_date', 'bcomment']
     # fields = ["btitle", "bpub_date"]
     fieldsets = (
-        ('基本', {'fields': ['btitle', 'bpub_date']}),
+        ('基本', {'fields': ['btitle', 'bpub_date', 'bimage']}),
         ('高级', {
-            'fields': ['bread', 'bcomment'],
+            'fields': ['bread', 'bcomment', ],
             'classes': ('collapse',)  # 是否折叠显示
         })
     )
