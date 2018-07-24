@@ -272,6 +272,6 @@ class BookAPIView(View):
         return HttpResponse(status=204)
 
 
-class BookInfoViewSet(ModelViewSet):
-    queryset = BookInfo.objects.all()
-    serializer_class = BookInfoSerializer
+# class BookInfoViewSet(ModelViewSet):
+#     queryset = BookInfo.objects.all()
+#     serializer_class = BookInfoSerializer
