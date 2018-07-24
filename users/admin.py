@@ -19,6 +19,8 @@ class BookInfoAdmin(admin.ModelAdmin):
             'classes': ('collapse',)  # 是否折叠显示
         })
     )
+    # 此页面.想操作成功,必须全部满足,才能写入数据库
+    # 比如:我只想上传4号书的封面,如果没满足下面的要求,提交错误
     inlines = [HeroInfoTabularInline]
 
 
