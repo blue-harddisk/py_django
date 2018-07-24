@@ -5,9 +5,11 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
+from rest_framework.viewsets import ModelViewSet
 
 from users.decorators import check_ip
 from users.models import BookInfo
+from users.serializers import BookInfoSerializer
 
 
 def index(request):
@@ -268,3 +270,8 @@ class BookAPIView(View):
 
         book.delete()
         return HttpResponse(status=204)
+
+
+class BookInfoViewSet(ModelViewSet):
+    queryset = BookInfo.objects.all()
+    serializer_class = BookInfoSerializer
