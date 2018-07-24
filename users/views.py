@@ -170,6 +170,7 @@ class BooksAPIView(View):
                 'bpub_date':book.bpub_date,
                 'bread':book.bread,
                 'bcomment':book.bcomment,
+                "bimage": book.bimage.url if book.bimage else ""
 
             })
 
@@ -221,6 +222,7 @@ class BookAPIView(View):
             'bpub_date': book.bpub_date,
             'bread': book.bread,
             'bcomment': book.bcomment,
+            "bimage": book.bimage.url if book.bimage else ""
         })
 
     def put(self, request, pk):
