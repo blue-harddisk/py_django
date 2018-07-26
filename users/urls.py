@@ -44,8 +44,10 @@ urlpatterns = [
     # url(r'^books/(?P<pk>\d+)/$', views.BookInfoAPIView.as_view()),
 
     # GenericAPIView的子视图类
-    url(r'^books/$', views.BooksInfoAPIView.as_view()),
-    url(r'^books/(?P<pk>\d+)/$', views.BookInfoAPIView.as_view())
+    url(r'^books/$', views.BookInfoViewSet.as_view({'get': 'list'})),
+    url(r'^books/latest/$', views.BookInfoViewSet.as_view({'get': 'latest'})),
+    url(r'^books/(?P<pk>\d+)/$', views.BookInfoViewSet.as_view({'get': 'retrieve'})),
+    url(r'^books/(?P<pk>\d+)/read/$', views.BookInfoViewSet.as_view({'put': 'read'})),
 ]
 
 # router = DefaultRouter()  # 可以处理视图的路由器

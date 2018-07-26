@@ -6,11 +6,12 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from users.decorators import check_ip
 from users.models import BookInfo
@@ -348,13 +349,43 @@ class BookAPIView(View):
 
 
 """GenericAPIView的子视图类"""
-class BooksInfoAPIView(ListAPIView):
-#     """获取所有数据"""
-    queryset = BookInfo.objects.all()
-    serializer_class = BookInfoSerializer
+# class BooksInfoAPIView(ListAPIView):
+# #     """获取所有数据"""
+#     queryset = BookInfo.objects.all()
+#     serializer_class = BookInfoSerializer
+#
+#
+# class BookInfoAPIView(RetrieveAPIView):
+#     """获取一条数据"""
+#     queryset = BookInfo.objects.all()
+#     serializer_class = BookInfoSerializer
 
 
-class BookInfoAPIView(RetrieveAPIView):
-    """获取一条数据"""
-    queryset = BookInfo.objects.all()
-    serializer_class = BookInfoSerializer
+"""使用视图集: GenericViewSet"""
+# class BookInfoViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
+#     queryset = BookInfo.objects.all()
+#     serializer_class = BookInfoSerializer
+#
+#     # detail为False 表示不需要处理具体的BookInfo对象
+#     @action(methods=['get'], detail=False)
+#     def latest(self, request):
+#         """
+#         返回最新的图书信息
+#         """
+#         book = BookInfo.objects.latest('id')
+#         serializer = self.get_serializer(book)
+#         return Response(serializer.data)
+#
+#     # detail为True，表示要处理具体与pk主键对应的BookInfo对象
+#     @action(methods=['put'], detail=True)
+#     def read(self, request, pk):
+#         """
+#         修改图书的阅读量数据
+#         """
+#         book = self.get_object()
+#         book.bread = request.data.get('bread')
+#         book.save()
+#         serializer = self.get_serializer(book)
+#         return Response(serializer.data)
+
+
