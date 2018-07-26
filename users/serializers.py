@@ -89,6 +89,7 @@ class BookInfoSerializer(serializers.ModelSerializer):
 
 
 class HeroInfoSerializer(serializers.ModelSerializer):
+    """英雄数据序列化器"""
     class Meta:
         model = HeroInfo
         # fields = '__all__'
