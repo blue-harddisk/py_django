@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
 from rest_framework import status
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -292,16 +293,36 @@ class BooksInfoAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class BookInfoAPIView(APIView):
-    def get(self,request,pk):
-        """
-        获取一本图书
-        GET  /books/<pk>
-        """
-        # 获取图书对象
-        book = BookInfo.objects.get(pk=pk)
-        # 序列化
-        serializer = BookInfoSerializer(book)
+# class BookInfoAPIView(APIView):
+#     """
+#          获取一本图书
+#          GET  /books/<pk>
+#
+#         """
+#     def get(self,request,pk):
+#         """
+#         获取一本图书
+#         GET  /books/<pk>
+#         """
+#         # 获取图书对象
+#         book = BookInfo.objects.get(pk=pk)
+#         # 序列化
+#         serializer = BookInfoSerializer(book)
+#
+#         # 响应数据
+#         return Response(serializer.data, status=status.HTTP_200_OK)
 
-        # 响应数据
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class BookInfoAPIView(GenericAPIView):
+    """
+      获取一本图书
+      GET  /books/<pk>
+
+    """
+    queryset = BookInfo.objects.all()
+    serializer_class = BookInfoSerializer
+
+    def get(self, request, pk):
+        book = self.get_object()
+        serializer = self.get_serializer(book)
+        return Response(serializer.data)
