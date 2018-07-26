@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
 from rest_framework import status
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -281,7 +281,7 @@ class BookAPIView(View):
 #     queryset = BookInfo.objects.all()
 #     serializer_class = BookInfoSerializer
 
-
+"""使用rest_framework提供的APIView视图"""
 # class BooksInfoAPIView(APIView):
 #     """
 #      获取所有图书
@@ -313,7 +313,7 @@ class BookAPIView(View):
 #         # 响应数据
 #         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
+"""使用GenericAPIView实现API接口"""
 # class BookInfoAPIView(GenericAPIView):
 #     """
 #       获取一本图书
@@ -329,18 +329,32 @@ class BookAPIView(View):
 #         return Response(serializer.data)
 
 
-class BooksInfoAPIView(ListModelMixin, GenericAPIView):
+"""使用GenericAPIView和视图扩展类实现API接口"""
+# class BooksInfoAPIView(ListModelMixin, GenericAPIView):
+#     queryset = BookInfo.objects.all()
+#     serializer_class = BookInfoSerializer
+#
+#     def get(self, request):
+#         """获取所有图书"""
+#         return self.list(request)
+#
+# class BookInfoAPIView(RetrieveModelMixin, GenericAPIView):
+#     queryset = BookInfo.objects.all()
+#     serializer_class = BookInfoSerializer
+#
+#     def get(self, request, pk):
+#         """获取一本图书"""
+#         return self.retrieve(request)
+
+
+"""GenericAPIView的子视图类"""
+class BooksInfoAPIView(ListAPIView):
+#     """获取所有数据"""
     queryset = BookInfo.objects.all()
     serializer_class = BookInfoSerializer
 
-    def get(self, request):
-        """获取所有图书"""
-        return self.list(request)
 
-class BookInfoAPIView(RetrieveModelMixin, GenericAPIView):
+class BookInfoAPIView(RetrieveAPIView):
+    """获取一条数据"""
     queryset = BookInfo.objects.all()
     serializer_class = BookInfoSerializer
-
-    def get(self, request, pk):
-        """获取一本图书"""
-        return self.retrieve(request)

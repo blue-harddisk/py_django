@@ -40,8 +40,12 @@ urlpatterns = [
     # url(r'^books/(?P<pk>\d+)/$', views.BookAPIView.as_view())
 
     # APIView
+    # url(r'^books/$', views.BooksInfoAPIView.as_view()),
+    # url(r'^books/(?P<pk>\d+)/$', views.BookInfoAPIView.as_view()),
+
+    # GenericAPIView的子视图类
     url(r'^books/$', views.BooksInfoAPIView.as_view()),
-    url(r'^books/(?P<pk>\d+)/$', views.BookInfoAPIView.as_view()),
+    url(r'^books/(?P<pk>\d+)/$', views.BookInfoAPIView.as_view())
 ]
 
 # router = DefaultRouter()  # 可以处理视图的路由器
