@@ -44,13 +44,22 @@ urlpatterns = [
     # url(r'^books/(?P<pk>\d+)/$', views.BookInfoAPIView.as_view()),
 
     # GenericAPIView的子视图类
-    url(r'^books/$', views.BookInfoViewSet.as_view({'get': 'list'})),
-    url(r'^books/latest/$', views.BookInfoViewSet.as_view({'get': 'latest'})),
-    url(r'^books/(?P<pk>\d+)/$', views.BookInfoViewSet.as_view({'get': 'retrieve'})),
-    url(r'^books/(?P<pk>\d+)/read/$', views.BookInfoViewSet.as_view({'put': 'read'})),
+    # url(r'^books/$', views.BookInfoViewSet.as_view({'get': 'list'})),  # name: book-list
+    # url(r'^books/latest/$', views.BookInfoViewSet.as_view({'get': 'latest'})),  # name: book-latest
+    # url(r'^books/(?P<pk>\d+)/$', views.BookInfoViewSet.as_view({'get': 'retrieve'})),  # name: book-retrieve
+    # url(r'^books/(?P<pk>\d+)/read/$', views.BookInfoViewSet.as_view({'put': 'read'})),  # name: book-read
 ]
 
 # router = DefaultRouter()  # 可以处理视图的路由器
 # router.register(r'mybooks', views.BookInfoViewSet)  # 向路由器中注册视图集
 #
 # urlpatterns += router.urls  # 将路由器中的所以路由信息追到到django的路由列表中
+
+
+routers = DefaultRouter()
+# prefix 该视图集的路由前缀
+# viewset 视图集
+# base_name 路由s
+routers.register(r"books", views.BookInfoViewSet, "book")
+
+urlpatterns += routers.urls # 路由生成以后的url地址，列表格式
