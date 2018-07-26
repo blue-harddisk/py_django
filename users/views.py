@@ -7,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -281,16 +282,16 @@ class BookAPIView(View):
 #     serializer_class = BookInfoSerializer
 
 
-class BooksInfoAPIView(APIView):
-    """
-     获取所有图书
-     GET  /books/
-
-    """
-    def get(self, request):
-        books = BookInfo.objects.all()
-        serializer = BookInfoSerializer(books, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+# class BooksInfoAPIView(APIView):
+#     """
+#      获取所有图书
+#      GET  /books/
+#
+#     """
+#     def get(self, request):
+#         books = BookInfo.objects.all()
+#         serializer = BookInfoSerializer(books, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # class BookInfoAPIView(APIView):
@@ -313,16 +314,33 @@ class BooksInfoAPIView(APIView):
 #         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class BookInfoAPIView(GenericAPIView):
-    """
-      获取一本图书
-      GET  /books/<pk>
+# class BookInfoAPIView(GenericAPIView):
+#     """
+#       获取一本图书
+#       GET  /books/<pk>
+#
+#     """
+#     queryset = BookInfo.objects.all()
+#     serializer_class = BookInfoSerializer
+#
+#     def get(self, request, pk):
+#         book = self.get_object()
+#         serializer = self.get_serializer(book)
+#         return Response(serializer.data)
 
-    """
+
+class BooksInfoAPIView(ListModelMixin, GenericAPIView):
+    queryset = BookInfo.objects.all()
+    serializer_class = BookInfoSerializer
+
+    def get(self, request):
+        """获取所有图书"""
+        return self.list(request)
+
+class BookInfoAPIView(RetrieveModelMixin, GenericAPIView):
     queryset = BookInfo.objects.all()
     serializer_class = BookInfoSerializer
 
     def get(self, request, pk):
-        book = self.get_object()
-        serializer = self.get_serializer(book)
-        return Response(serializer.data)
+        """获取一本图书"""
+        return self.retrieve(request)
