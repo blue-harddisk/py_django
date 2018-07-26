@@ -5,6 +5,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from users.decorators import check_ip
@@ -275,3 +278,30 @@ class BookAPIView(View):
 # class BookInfoViewSet(ModelViewSet):
 #     queryset = BookInfo.objects.all()
 #     serializer_class = BookInfoSerializer
+
+
+class BooksInfoAPIView(APIView):
+    """
+     获取所有图书
+     GET  /books/
+
+    """
+    def get(self, request):
+        books = BookInfo.objects.all()
+        serializer = BookInfoSerializer(books, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BookInfoAPIView(APIView):
+    def get(self,request,pk):
+        """
+        获取一本图书
+        GET  /books/<pk>
+        """
+        # 获取图书对象
+        book = BookInfo.objects.get(pk=pk)
+        # 序列化
+        serializer = BookInfoSerializer(book)
+
+        # 响应数据
+        return Response(serializer.data, status=status.HTTP_200_OK)
